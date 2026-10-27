@@ -42,6 +42,7 @@ jobs:
           node --check apps/browser-extension/core.mjs
           node --test apps/browser-extension/tests/core.test.mjs
           node --test apps/web/scripts/apply-assistant.contract.test.mjs
+          node --test apps/web/scripts/auth-redirect.contract.test.mjs
 
   extension-package:
     name: Extension package integrity
