@@ -6,7 +6,7 @@ import { navigate } from '../router';
 export function AuthPage({ user, onUser, accountType = 'candidate', initialMode = 'login' }: { user: User | null; onUser: (user: User) => void; accountType?: AccountType; initialMode?: 'login'|'register' }) {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [name, setName] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
   useEffect(() => { setMode(initialMode); setError(''); }, [accountType, initialMode]);
-  const next = new URLSearchParams(location.search).get('next'); const defaultNext=accountType==='recruiter'?'/employer':'/candidate'; const safeNext = next?.startsWith('/') && !next.startsWith('//') ? next : defaultNext;
+  const next = new URLSearchParams(location.search).get('next'); const defaultNext='/'; const safeNext = next?.startsWith('/') && !next.startsWith('//') ? next : defaultNext;
   const label=accountType==='recruiter'?'招聘方账户':'求职者账户';
   async function submit(event: FormEvent) { event.preventDefault(); setError(''); if (password.length < 12) return setError('密码至少需要 12 位。'); setBusy(true); try { if (mode === 'register') await api.register(email, password, name, accountType); await api.login(email, password, accountType); const current = await api.me(); onUser(current); navigate(safeNext); } catch (e) { setError(e instanceof ApiError ? e.message : '请求失败。'); } finally { setBusy(false); } }
   useEffect(() => {

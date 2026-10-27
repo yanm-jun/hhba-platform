@@ -14,7 +14,7 @@ export function DemoAuthPage({initialMode='login'}:{initialMode?:Mode}){
  const mode=initialMode;
  const existing=readDemoProfile();
  const returnPath=new URLSearchParams(location.search).get('next');
- const next=returnPath&&['/candidate/account','/candidate/saved','/candidate/account/preferences','/candidate/account/profile','/candidate/official-outbound'].includes(returnPath)?returnPath:'/candidate/account';
+ const next=returnPath&&['/candidate/account','/candidate/saved','/candidate/account/preferences','/candidate/account/profile','/candidate/official-outbound'].includes(returnPath)?returnPath:'/';
  const resumeQuery=returnPath==='/candidate/official-outbound'?'?next=%2Fcandidate%2Fofficial-outbound':'';
  function submit(event:FormEvent<HTMLFormElement>){
   event.preventDefault();setError('');
