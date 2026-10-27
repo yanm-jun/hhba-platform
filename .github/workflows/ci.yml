@@ -26,6 +26,9 @@ jobs:
         working-directory: apps/web
       - run: npm run build
         working-directory: apps/web
+      - name: Role entry and OTP gating contracts
+        run: node --test scripts/role-auth.contract.test.mjs
+        working-directory: apps/web
 
   extension-tests:
     name: Extension unit and page contract tests
