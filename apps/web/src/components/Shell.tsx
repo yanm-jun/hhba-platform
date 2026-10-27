@@ -30,7 +30,6 @@ export function Shell({ user, children }: { user: User | null; children: React.R
  // A local demo account must never satisfy this requirement.
  const verifiedCandidate=employerApiReady&&hasCandidate;
  const recruiterSignedIn=hasRecruiter;
- const employerEntry=recruiterSignedIn?'/employer/hub':'/employer/onboarding-preview';
  // Central capture covers all recruiting links across existing company/job pages,
  // not merely the example highlighted by the user.
  function guardRecruitmentClick(event:MouseEvent<HTMLElement>){
@@ -67,7 +66,7 @@ export function Shell({ user, children }: { user: User | null; children: React.R
      <Link className="join-nav-link" to="/join">加入我们</Link>
      {candidateSignedIn?<Link className="hhba-nav-account" to="/candidate/account">个人中心</Link>:
        recruiterSignedIn?<Link className="hhba-nav-account" to="/employer/hub">企业账户</Link>:
-       <Link className="hhba-nav-account" to="/candidate/register">登录 / 注册</Link>}
+       <Link className="hhba-nav-account" to="/auth">登录 / 注册</Link>}
    </nav>:experience==='candidate'?<nav aria-label="求职者服务导航">
      <Link className="auth" to="/candidate/jobs">招聘市场</Link>
      <Link className="auth" to="/companies/discover">企业发现</Link>
@@ -76,7 +75,7 @@ export function Shell({ user, children }: { user: User | null; children: React.R
      {candidateSignedIn?<><CandidateAccountDropdown/>
        {demoModeEnabled&&demo&&<button type="button" className="text-button" onClick={()=>{exitDemoAccount();navigate('/candidate/login')}}>退出演示</button>}
        {hasCandidate&&<Link className="hhba-nav-account" to="/candidate/account">{user?.display_name||'个人中心'}</Link>}
-      </>:<Link className="hhba-nav-account" to="/candidate/register">登录 / 注册</Link>}
+      </>:<Link className="hhba-nav-account" to="/auth">登录 / 注册</Link>}
    </nav>:<nav aria-label="企业招聘与治理导航">
      <Link className="auth" to="/employer/start">企业服务</Link>
      <Link className="auth" to="/employer/hub">企业工作台</Link>
@@ -85,7 +84,7 @@ export function Shell({ user, children }: { user: User | null; children: React.R
      <Link className="auth" to="/employer/aid">发展帮扶</Link>
      <Link className="hhba-nav-switch" to="/candidate/jobs">返回求职端 <BriefcaseBusiness size={13}/></Link>
      {recruiterSignedIn?<Link className="hhba-nav-account" to="/employer/hub"><Building2 size={14}/> 企业账户</Link>:
-       <Link className="hhba-nav-account" to={employerEntry}>企业入驻</Link>}
+       <Link className="hhba-nav-account" to="/auth">登录 / 注册</Link>}
    </nav>}
   </header>
   {children}

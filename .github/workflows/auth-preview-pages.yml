@@ -1,0 +1,58 @@
+name: HHBA isolated login preview
+on:
+  push:
+    branches:
+      - feat/role-auth-entry-20261027
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: hhba-platform-auth-preview
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install
+        working-directory: apps/web
+        run: npm ci --no-audit --no-fund
+      - name: Check account entry and safety
+        working-directory: apps/web
+        run: node --test scripts/role-auth.contract.test.mjs
+      - name: Build isolated static preview
+        working-directory: apps/web
+        env:
+          HHBA_PAGES_BASE: /hhba-platform/
+          VITE_HHBA_ACCOUNT_API_ENABLED: '0'
+          VITE_HHBA_PHONE_AUTH_ENABLED: '0'
+        run: npm run build
+      - name: Support direct visits to SPA routes
+        working-directory: apps/web
+        run: cp dist/index.html dist/404.html
+      - name: Enable GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload preview site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish isolated preview
+        id: deployment
+        uses: actions/deploy-pages@v4
