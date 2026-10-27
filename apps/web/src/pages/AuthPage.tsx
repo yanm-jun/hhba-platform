@@ -1,7 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Shell } from '../components/Shell';
 import { api, ApiError, type AccountType, type User } from '../services/api';
-import { navigate } from '../router';
+import { Link, navigate } from '../router';
+
+function AccountRoleEntry() {
+  return <Shell user={null}><section className="auth-layout"><div className="eyebrow">HHBA · 账户入口</div><h1>你想使用 HHBA 做什么？</h1><p>先选择你的使用身份。求职者与招聘者进入各自的服务流程；后续可在账户内申请开通另一种身份。</p><div className="workspace-grid" aria-label="选择账户身份"><Link className="workspace-card" to="/candidate/register"><strong>我要找工作</strong><span>创建求职者账户，管理简历、收藏岗位并决定个人资料的授权范围。</span></Link><Link className="workspace-card" to="/recruiter/register"><strong>我要招聘</strong><span>创建招聘者账户，完成企业与经办人认证后发布和管理招聘岗位。</span></Link></div><p className="auth-role-login">已有账户？请选择身份后登录：<Link to="/candidate/login">求职者登录</Link> · <Link to="/recruiter/login">招聘者登录</Link></p></section></Shell>;
+}
 
 export function AuthPage({ user, onUser, accountType = 'candidate', initialMode = 'login' }: { user: User | null; onUser: (user: User) => void; accountType?: AccountType; initialMode?: 'login'|'register' }) {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [name, setName] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
@@ -13,5 +17,6 @@ export function AuthPage({ user, onUser, accountType = 'candidate', initialMode 
     if (user) navigate((user.account_types || []).includes(accountType) ? safeNext : '/');
   }, [accountType, safeNext, user]);
   if (user) return null;
+  if (location.pathname === '/auth') return <AccountRoleEntry/>;
   return <Shell user={null}><section className="auth-layout"><div className="eyebrow">HHBA · {label}</div><h1>{mode === 'login' ? `登录${label}` : `创建${label}`}</h1><p>{accountType==='recruiter'?'招聘方注册后可创建组织并提交企业与经办人认证；认证通过前不能检索人才。':'上传并核对简历后，由你决定是否授权企业检索或公开分享。'}</p><form className="form-card" onSubmit={submit}>{mode === 'register' && <label>展示名称<input required maxLength={100} autoComplete="name" value={name} onChange={e => setName(e.target.value)} /></label>}<label>邮箱<input required type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} /></label><label>密码<input required type="password" minLength={12} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} value={password} onChange={e => setPassword(e.target.value)} /><small>至少 12 位；不会在浏览器保存。</small></label>{error && <p role="alert" className="form-error">{error}</p>}<button className="primary-button" disabled={busy}>{busy ? '处理中…' : mode === 'login' ? '登录' : '注册并继续'}</button></form><button className="text-button switch" onClick={() => { const nextMode=mode === 'login' ? 'register' : 'login'; setMode(nextMode); setError(''); navigate(`/${accountType === 'recruiter' ? 'recruiter' : 'candidate'}/${nextMode}${safeNext==='/candidate/official-outbound'?'?next=%2Fcandidate%2Fofficial-outbound':''}`); }}>{mode === 'login' ? '还没有账户？注册' : '已有账户？登录'}</button></section></Shell>;
 }
