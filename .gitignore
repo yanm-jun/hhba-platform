@@ -20,6 +20,7 @@ dist/
 build/
 .vite/
 *.local
+*.tsbuildinfo
 
 # 数据与模型（本地测试数据不提交）
 data/
