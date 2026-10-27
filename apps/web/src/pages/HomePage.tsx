@@ -1,7 +1,6 @@
 import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Search, ShieldCheck, UsersRound } from 'lucide-react';
 import { Link, navigate } from '../router';
 import { Shell } from '../components/Shell';
-import { UnifiedJobMarket } from '../components/UnifiedJobMarket';
 import { HomeCompanyMarquee } from '../components/HomeCompanyMarquee';
 import { HomePeopleBanner } from '../components/HomePeopleBanner';
 import { HomeOpenLetter } from '../components/HomeOpenLetter';
@@ -43,7 +42,6 @@ export function HomePage({user}:{user:User|null}){
     <p>全平台统一提供 DeepSeek，匹配官方招聘岗位，分析符合条件和能力差距。</p></div>
    <button type="button" onClick={()=>navigate('/candidate/match')}>使用简历智能匹配 <ArrowUpRight size={16}/></button>
   </div>
-  <UnifiedJobMarket compact/>
   <section className="home-company-discover-link" style={{maxWidth:1120,margin:'0 auto 32px',padding:'20px 22px',background:'#fff',border:'1px solid var(--line)',borderRadius:12,display:'flex',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between',gap:14}}>
    <div><strong>企业发现 · 200 家国内企业</strong><p style={{color:'var(--muted)',fontSize:13,margin:'7px 0 0'}}>按企业名称、行业和所学专业了解企业与官方招聘渠道，资料状态逐项标注。</p></div>
    <Link to="/companies/discover" style={{display:'inline-flex',alignItems:'center',gap:7,color:'#265e45',fontSize:13,fontWeight:700,textDecoration:'none'}}>探索 200 家企业 <ArrowUpRight size={15}/></Link>

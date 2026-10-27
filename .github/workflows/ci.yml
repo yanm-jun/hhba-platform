@@ -26,6 +26,8 @@ jobs:
         working-directory: apps/web
       - run: npm run build
         working-directory: apps/web
+      - run: node --test scripts/homepage-job-card-noise.contract.test.mjs
+        working-directory: apps/web
 
   extension-tests:
     name: Extension unit and page contract tests
